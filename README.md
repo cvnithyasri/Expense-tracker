@@ -1,1 +1,167 @@
 # Expense-tracker
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aesthetic Expense Tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #fffafc;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background: #fdf3f8;
+      padding: 25px;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(255, 173, 199, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff80a2;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    button {
+      width: 100%;
+      background: #ffb6c1;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #ff9fb1;
+    }
+
+    .expense-list {
+      margin-top: 20px;
+    }
+
+    .expense {
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(255, 182, 193, 0.1);
+    }
+
+    .expense span {
+      font-size: 16px;
+    }
+
+    .expense button {
+      background: #ffe6eb;
+      color: #ff4d6d;
+      font-weight: bold;
+      padding: 6px 10px;
+      width: auto;
+      font-size: 14px;
+    }
+
+    .total {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #c94f6d;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💖 Expense Tracker</h1>
+    <input type="text" id="name" placeholder="Expense name (e.g., bubble tea)" />
+    <input type="number" id="amount" placeholder="Amount (e.g., 150)" />
+    <button onclick="addExpense()">Add Expense</button>
+
+    <div class="expense-list" id="expense-list"></div>
+    <div class="total" id="total">Total: ₹0</div>
+  </div>
+
+  <script>
+    let expenses = [];
+
+    function addExpense() {
+      const nameInput = document.getElementById("name");
+      const amountInput = document.getElementById("amount");
+
+      const name = nameInput.value.trim();
+      const amount = parseFloat(amountInput.value);
+
+      if (!name || isNaN(amount) || amount <= 0) {
+        alert("Please enter valid details 💸");
+        return;
+      }
+
+      const expense = { name, amount };
+      expenses.push(expense);
+      nameInput.value = "";
+      amountInput.value = "";
+
+      renderExpenses();
+    }
+
+    function removeExpense(index) {
+      expenses.splice(index, 1);
+      renderExpenses();
+    }
+
+    function renderExpenses() {
+      const list = document.getElementById("expense-list");
+      const totalDiv = document.getElementById("total");
+
+      list.innerHTML = "";
+      let total = 0;
+
+      expenses.forEach((exp, index) => {
+        total += exp.amount;
+
+        const item = document.createElement("div");
+        item.className = "expense";
+
+        item.innerHTML = `
+          <span>${exp.name} - ₹${exp.amount}</span>
+          <button onclick="removeExpense(${index})">✕</button>
+        `;
+
+        list.appendChild(item);
+      });
+
+      totalDiv.textContent = `Total: ₹${total}`;
+    }
+  </script>
+</body>
+</html>
